@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!
+{% endblock %}
+
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="css/panier.css">
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container mt-4">
+    <h3>Panier : <span id="cart-count">0</span> article(s)</h3>
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-3">
+                <div class="product-card">
+                    <img class="product-img" src="https://cdn.shopify.com/s/files/1/2358/2817/products/dunk-low-next-nature-black-white-330678.png?v=1638813895" alt="{{ product.name }}">
+                    <div class="product-info mt-3">
+                        <h5>{{ product.name }}</h5>
+                        <p class="text-muted">{{ product.price }} €</p>
+                        <button 
+                            class="add-to-cart-btn"
+                            data-id="{{ product.id }}"
+                            data-name="{{ product.name }}"
+                            data-price="{{ product.price }}"
+                        >Ajouter au panier</button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="js/panier.js"></script>
+
+{% endblock %}
