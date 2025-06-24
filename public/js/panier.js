@@ -34,7 +34,39 @@ const cart = JSON.parse(localStorage.getItem('cart')) || [];
     });
     updateCartCount();
 
-    let buttonPayment = document.querySelectorAll('#button-payment');
-    buttonPayment.addEventListener('click', () => {
+    document.getElementById('button-payment').addEventListener('click', async () => {
+
+        if (cart.length == 0) {
+            alert("votre panier est vide")
+            return
+        } 
+
+        let panier = [];
+        cart.forEach(product => {
+            panier.push({
+                id: product.id,
+                quantity: product.quantity
+            });
+        });
         
+        let response = await fetch('/stripe/create/link', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                products: panier
+            }),
+        });
+
+        const data = await response.json();
+
+        if (data.url) {
+            window.location.href = data.url;
+            localStorage.clear();
+        } else {
+            alert("Erreur : lien non reçu.");
+            localStorage.clear();
+        }
+
     })

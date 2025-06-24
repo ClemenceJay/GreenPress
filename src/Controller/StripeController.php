@@ -2,47 +2,57 @@
 
 namespace App\Controller;
 
+use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class StripeController extends AbstractController
 {
-    #[Route('/stripe/create/link', name: 'app_stripe')]
-    public function index()
+    #[Route('/stripe/create/link', name: 'app_stripe', methods: ['POST'])]
+    public function createPaymentLink(Request $request, ProductRepository $productRepository)
     {
-        // Set your secret key. Remember to switch to your live secret key in production.
-        // See your keys here: https://dashboard.stripe.com/apikeys
+
+        // Recup des données
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['products'])) {
+            return new JsonResponse(['error' => 'Invalid amount'], 400);
+        }
+
+        $products = $data['products'];
+        $amountCalc = 0;
+        // faire le total du panier
+        foreach ($products as $product) {
+            $infoProduct = $productRepository->find($product['id']);
+            $priceProduct = round(($infoProduct->getPrice())*100);
+            $totalProduct = $priceProduct*($product['quantity']);
+            $amountCalc += $totalProduct;
+        }
+
         $stripeKeyS=$_ENV["StripeKeyS"];
         $stripe = new \Stripe\StripeClient($stripeKeyS);
 
-        // $product = $stripe->products->create(['name' => 'Per-seat']);
-        // $product = $product->values();
         $price = $stripe->prices->create([
             'currency' => 'eur',
-            'unit_amount' => 1000,
-            'product_data' => ['name' => 'Gold Plan'],
+            'unit_amount' => $amountCalc,
+            'product_data' => ['name' => 'Panier Client'],
         ]);
-        $price = $price->values();
+        
         $paymentLink = $stripe->paymentLinks->create([
             'line_items' => [
                 [
-                    'price' => $price[0],
+                    'price' => $price->id,
                     'quantity' => 1,
                 ],
             ],
             'after_completion' => [
                 'type' => 'redirect',
-                'redirect' => ['url' => 'https://example.com'],
+                'redirect' => ['url' => 'http://localhost:8000'],
             ],
         ]);
 
-        $paymentLink = $paymentLink->values();
-
-        return $this->redirect($paymentLink[31]);
-
-        return $this->render('stripe/index.html.twig', [
-            'controller_name' => 'StripeController',
-        ]);
+        return new JsonResponse(['url' => $paymentLink->url]);
     }
 }
