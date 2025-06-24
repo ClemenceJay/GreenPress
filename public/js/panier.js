@@ -33,3 +33,8 @@ const cart = JSON.parse(localStorage.getItem('cart')) || [];
         });
     });
     updateCartCount();
+
+    let buttonPayment = document.querySelectorAll('#button-payment');
+    buttonPayment.addEventListener('click', () => {
+        
+    })

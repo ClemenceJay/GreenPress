@@ -12,7 +12,10 @@
 {% block body %}
 
 <div class="container mt-4">
-    <h3>Panier : <span id="cart-count">0</span> article(s)</h3>
+    <div class="cart-handling">
+        <h3>Panier : <span id="cart-count">0</span> article(s)</h3>
+        <button id="button-payment">Payer</button>
+    </div>
     <div class="row">
         {% for product in products %}
             <div class="col-md-3">
