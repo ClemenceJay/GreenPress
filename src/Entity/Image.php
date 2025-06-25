@@ -16,11 +16,11 @@ class Image
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $url = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $alt = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    #[ORM\Column(length: 400, nullable: true)]
+    private ?string $filePath = null;
 
     public function getId(): ?int
     {
@@ -39,26 +39,26 @@ class Image
         return $this;
     }
 
-    public function getAlt(): ?string
+    public function getName(): ?string
     {
-        return $this->alt;
+        return $this->name;
     }
 
-    public function setAlt(string $alt): static
+    public function setName(?string $name): static
     {
-        $this->alt = $alt;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getTitle(): ?string
+    public function getFilePath(): ?string
     {
-        return $this->title;
+        return $this->filePath;
     }
 
-    public function setTitle(string $title): static
+    public function setFilePath(?string $filePath): static
     {
-        $this->title = $title;
+        $this->filePath = $filePath;
 
         return $this;
     }

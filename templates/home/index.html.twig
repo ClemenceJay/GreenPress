@@ -20,7 +20,7 @@
         {% for product in products %}
             <div class="col-md-3">
                 <div class="product-card">
-                    <img class="product-img" src="https://cdn.shopify.com/s/files/1/2358/2817/products/dunk-low-next-nature-black-white-330678.png?v=1638813895" alt="{{ product.name }}">
+                    <img class="product-img" src="{{ asset(product.imagePath()) }}" alt="{{ product.name }}">
                     <div class="product-info mt-3">
                         <h5>{{ product.name }}</h5>
                         <p class="text-muted">{{ product.price }} €</p>

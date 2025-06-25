@@ -25,7 +25,9 @@ final class StripeController extends AbstractController
         $amountCalc = 0;
         // faire le total du panier
         foreach ($products as $product) {
+            // récupère les données des produits concernés
             $infoProduct = $productRepository->find($product['id']);
+            // récupère le prix dans la base et *100 pour en centimes
             $priceProduct = round(($infoProduct->getPrice())*100);
             $totalProduct = $priceProduct*($product['quantity']);
             $amountCalc += $totalProduct;

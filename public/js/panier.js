@@ -66,7 +66,6 @@ const cart = JSON.parse(localStorage.getItem('cart')) || [];
             localStorage.clear();
         } else {
             alert("Erreur : lien non reçu.");
-            localStorage.clear();
         }
 
     })
