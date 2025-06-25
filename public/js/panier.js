@@ -20,6 +20,14 @@ const cart = JSON.parse(localStorage.getItem('cart')) || [];
         saveCart();
     }
 
+    function deleteFromCart(product) {
+        const index = cart.findIndex(p => p.id === product.id);
+        if (index => 0) {
+            cart.splice(index, 1)
+        }
+        saveCart();
+    }
+
     document.querySelectorAll('.add-to-cart-btn').forEach(button => {
         button.addEventListener('click', () => {
             const product = {
@@ -30,6 +38,17 @@ const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
             addToCart(product);
 
+        });
+    });
+    updateCartCount();
+
+    document.querySelectorAll('.delete-from-cart-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const product = {
+                id: button.dataset.id,
+            };
+
+            deleteFromCart(product);
         });
     });
     updateCartCount();
