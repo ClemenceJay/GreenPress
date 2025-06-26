@@ -53,38 +53,31 @@ const cart = JSON.parse(localStorage.getItem('cart')) || [];
     });
     updateCartCount();
 
-    document.getElementById('button-payment').addEventListener('click', async () => {
-
-        if (cart.length == 0) {
+    function payOrder() {
+        let jsonOrder = JSON.parse(localStorage.getItem('cart'));
+        jsonOrder = JSON.stringify({'order':jsonOrder});
+        if (jsonOrder.length == 0) {
             alert("votre panier est vide")
             return
-        } 
-
-        let panier = [];
-        cart.forEach(product => {
-            panier.push({
-                id: product.id,
-                quantity: product.quantity
-            });
-        });
-        
-        let response = await fetch('/stripe/create/link', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                products: panier
-            }),
-        });
-
-        const data = await response.json();
-
-        if (data.url) {
-            window.location.href = data.url;
-            localStorage.clear();
-        } else {
-            alert("Erreur : lien non reçu.");
         }
 
-    })
+        fetch("http://localhost:8000/stripe/create/link", {
+            method: "POST",
+            body: jsonOrder,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.url) {
+                window.location.href = data.url;
+                localStorage.clear();
+            } else {
+                console.error("URL de redirection manquante");
+            }
+        })
+        .catch(error => console.error("Erreur lors de la requête :", error));
+        
+    }
+    updateCartCount();

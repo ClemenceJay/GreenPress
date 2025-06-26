@@ -37,11 +37,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Commande>
      */
     #[ORM\OneToMany(targetEntity: Commande::class, mappedBy: 'User')]
-    private Collection $commandes;
+    private Collection $commande;
 
     public function __construct()
     {
-        $this->commandes = new ArrayCollection();
+        $this->commande = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -120,15 +120,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Commande>
      */
-    public function getCommandes(): Collection
+    public function getCommande(): Collection
     {
-        return $this->commandes;
+        return $this->commande;
     }
 
     public function addCommande(Commande $commande): static
     {
-        if (!$this->commandes->contains($commande)) {
-            $this->commandes->add($commande);
+        if (!$this->commande->contains($commande)) {
+            $this->commande->add($commande);
             $commande->setUser($this);
         }
 
@@ -137,7 +137,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeCommande(Commande $commande): static
     {
-        if ($this->commandes->removeElement($commande)) {
+        if ($this->commande->removeElement($commande)) {
             // set the owning side to null (unless already changed)
             if ($commande->getUser() === $this) {
                 $commande->setUser(null);

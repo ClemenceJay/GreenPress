@@ -14,7 +14,7 @@
 <div class="container mt-4">
     <div class="cart-handling">
         <h3>Panier : <span id="cart-count">0</span> article(s)</h3>
-        <button id="button-payment">Payer</button>
+        <button id="button-payment" onclick="payOrder()" >Payer</button>
     </div>
     <div class="row">
         {% for product in products %}

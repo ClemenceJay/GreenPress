@@ -15,21 +15,24 @@ class Commande
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'commandes')]
+    #[ORM\ManyToOne(inversedBy: 'commande')]
     private ?User $User = null;
 
     #[ORM\Column]
     private ?\DateTime $date = null;
 
+    #[ORM\ManyToOne(inversedBy: 'commande')]
+    private ?Status $status = null;
+
     /**
-     * @var Collection<int, Status>
+     * @var Collection<int, ProductCommande>
      */
-    #[ORM\OneToMany(targetEntity: Status::class, mappedBy: 'Commande')]
-    private Collection $status;
+    #[ORM\OneToMany(targetEntity: ProductCommande::class, mappedBy: 'commande')]
+    private Collection $productCommande;
 
     public function __construct()
     {
-        $this->status = new ArrayCollection();
+        $this->ProductCommande = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -61,30 +64,43 @@ class Commande
         return $this;
     }
 
-    /**
-     * @return Collection<int, Status>
-     */
-    public function getStatus(): Collection
+    public function getStatus(): ?Status
     {
         return $this->status;
     }
 
-    public function addStatus(Status $status): static
+    public function setStatus(?Status $status): static
     {
-        if (!$this->status->contains($status)) {
-            $this->status->add($status);
-            $status->setCommande($this);
+        
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductCommande>
+     */
+    public function getProductCommande(): Collection
+    {
+        return $this->ProductCommande;
+    }
+
+    public function addProductCommande(ProductCommande $productCommande): static
+    {
+        if (!$this->ProductCommande->contains($productCommande)) {
+            $this->ProductCommande->add($productCommande);
+            $productCommande->setCommande($this);
         }
 
         return $this;
     }
 
-    public function removeStatus(Status $status): static
+    public function removeProductCommande(ProductCommande $productCommande): static
     {
-        if ($this->status->removeElement($status)) {
+        if ($this->ProductCommande->removeElement($productCommande)) {
             // set the owning side to null (unless already changed)
-            if ($status->getCommande() === $this) {
-                $status->setCommande(null);
+            if ($productCommande->getProductCommande() === $this) {
+                $productCommande->setProductCommande(null);
             }
         }
 
