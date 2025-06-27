@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
 	<link rel="stylesheet" href="/css/productList.css">
+	<link rel="stylesheet" href="/css/flashMessage.css">
 {% endblock %}
 
 {% block body %}
@@ -11,7 +12,7 @@
 			<div class="flash-card flash-{{ label }}">
 				<div class="flash-card-content">
 					{{ message }}
-					<button class="flash-close" aria-label="Fermer" onclick="closeFlashCrad(this)">&times;</button>
+					<button class="flash-close" aria-label="Fermer" onclick="closeFlashCard(this)">&times;</button>
 				</div>
 			</div>
 		{% endfor %}
@@ -50,5 +51,5 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="js/productList.js"></script>
+    <script src="js/flashMessage.js"></script>
 {% endblock %}

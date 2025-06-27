@@ -61,7 +61,7 @@ const cart = JSON.parse(localStorage.getItem('cart')) || [];
             return
         }
 
-        fetch("http://localhost:8000/stripe/create/link", {
+        fetch("http://localhost:8000/stripe/create/session", {
             method: "POST",
             body: jsonOrder,
             headers: {

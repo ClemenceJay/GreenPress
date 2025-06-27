@@ -117,7 +117,7 @@ final class StripeController extends AbstractController
         $em->persist($commande);
         $em->flush();
 
-        // retourne l'URL pour que le front reg=dirige l'user sur la session de paiement Stripe
+        // retourne l'URL pour que le front redirige l'user sur la session de paiement Stripe
         return new JsonResponse(['url' => $session->url]);
     }
 
@@ -163,7 +163,6 @@ final class StripeController extends AbstractController
                 }
             }
         }
-
         return new JsonResponse(['status' => 'success'], 200);
     }
 }

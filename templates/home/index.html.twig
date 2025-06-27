@@ -6,12 +6,24 @@
 
 {% block stylesheets %}
 	<link rel="stylesheet" href="css/panier.css">
+	<link rel="stylesheet" href="css/flashMessage.css">
 {% endblock %}
 
 
 {% block body %}
 
 <div class="container mt-4">
+    {% for label, messages in app.flashes %}
+		{% for message in messages %}
+			<div class="flash-card flash-{{ label }}">
+				<div class="flash-card-content">
+					{{ message }}
+					<button class="flash-close" aria-label="Fermer" onclick="closeFlashCard(this)">&times;</button>
+				</div>
+			</div>
+		{% endfor %}
+	{% endfor %}
+
     <div class="cart-handling">
         <h3>Panier : <span id="cart-count">0</span> article(s)</h3>
         <button id="button-payment" onclick="payOrder()" >Payer</button>
@@ -43,5 +55,6 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="js/flashMessage.js"></script>
     <script src="js/panier.js"></script>
 {% endblock %}
