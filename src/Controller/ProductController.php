@@ -15,11 +15,12 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ProductController extends AbstractController
 {
 
-    #[Route('/product/list', name: 'product_list')]
+    #[Route('/product', name: 'product_list')]
     public function listProduct(ProductRepository $productRepository): Response
     {
+        // récupère tous les produits
         $products = $productRepository->findAll();
-        return $this->render('product/list.html.twig', ['products' => $products]);
+        return $this->render('product/index.html.twig', ['products' => $products]);
     }
 
 
@@ -34,6 +35,7 @@ final class ProductController extends AbstractController
 
             if ($uploadedFile) {
 
+                // gestion du nom du fichier
                 $uploadsDirectory = 'uploads/images/products/';
                 $filename = $request->request->get("name"). '.' .$uploadedFile->guessExtension();
                 $filenameClean = str_replace(" ", "_", $filename);
@@ -50,28 +52,52 @@ final class ProductController extends AbstractController
                 $imageRepository->save($image, true);
                 $productRepository->save($product, true);
             }
-
+            // flash message et redirection sur la liste des produits
+            $this->addFlash('success', 'Le produit a bien été créé.');
+            return $this->redirectToRoute('product_list');
         }
 
-        return $this->render('product/index.html.twig', ['product' => $product]);
+        return $this->render('product/create.html.twig', ['product' => $product]);
     }
 
     #[Route('/product/update/{product}', name: 'product_update')]
-    public function updateProduct(Product $product, Request $request, ProductRepository $productRepository): Response
-    {
+    public function updateProduct(Product $product, Request $request, ProductRepository $productRepository, ImageRepository $imageRepository): Response
+    {   
 
-        dump($product);
         if ($request->isMethod('POST')) {
 
+            $uploadedFile = $request->files->get('file');
+
+            // Cas où une nouvelle image est uploadée
+            if ($uploadedFile) {
+
+                $image = new Image();
+
+                $uploadsDirectory = 'uploads/images/products/';
+                $filename = $request->request->get("name") . '.' . $uploadedFile->guessExtension();
+                $filenameClean = str_replace(" ", "_", $filename);
+
+                $image->setName($filenameClean);
+                $image->setFilePath($uploadsDirectory . $filenameClean);
+                $uploadedFile->move($uploadsDirectory, $filenameClean);
+                $product->setImagePath($uploadsDirectory . $filenameClean);
+                $imageRepository->save($image, true);
+            }
+
+            
             $product->setName($request->request->get("name"));
             $product->setDescription($request->request->get("description"));
             $product->setPrice($request->request->get("price"));
 
             $productRepository->save($product, true);
+
+            // flash message et redirection sur la liste des produits
+            $this->addFlash('success', 'Le produit a bien été modifié.');
+            return $this->redirectToRoute('product_list');
         }
 
 
-        return $this->render('product/index.html.twig', ['product' => $product]);
+        return $this->render('product/create.html.twig', ['product' => $product]);
     }
 
 
@@ -81,8 +107,9 @@ final class ProductController extends AbstractController
 
         $productRepository->remove($product, true);
 
-
-
-        return $this->render('product/index.html.twig', ['product' => $product]);
+        // flash message et redirection sur la liste des produits
+        $this->addFlash('success', 'Le produit a bien été supprimé.');
+        return $this->redirectToRoute('product_list');
+    
     }
 }

@@ -30,6 +30,9 @@ class Commande
     #[ORM\OneToMany(targetEntity: ProductCommande::class, mappedBy: 'commande')]
     private Collection $productCommande;
 
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $stripeSessionId = null;
+
     public function __construct()
     {
         $this->ProductCommande = new ArrayCollection();
@@ -103,6 +106,18 @@ class Commande
                 $productCommande->setProductCommande(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStripeSessionId(): ?string
+    {
+        return $this->stripeSessionId;
+    }
+
+    public function setStripeSessionId(?string $stripeSessionId): static
+    {
+        $this->stripeSessionId = $stripeSessionId;
 
         return $this;
     }
