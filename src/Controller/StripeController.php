@@ -155,7 +155,7 @@ final class StripeController extends AbstractController
 
             $commande = $em->getRepository(Commande::class)->findOneBy(['stripeSessionId' => $session->id]);
             if ($commande) {
-                $status = $statusRepository->findOneBy(['status' => 'Confirmée']);
+                $status = $statusRepository->findOneBy(['status' => 'Payée']);
                 if ($status) {
                     $commande->setStatus($status);
                     $em->persist($commande);

@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Etat des commandes{% endblock %}
+
+{% block body %}
+
+<h1>{{message}}</h1>
+
+<div class="container">
+    <div class="container-filter">
+        <a href="{{ path('commande_payed') }}"><button>Payées</button></a>
+        <a><button>En traitement</button></a>
+        <a><button>En livraison</button></a>
+        <a><button>Livrées</button></a>
+        <a><button>Annulée</button></a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>N° de commande</th>
+                <th>Utilisateur</th>
+                <th>Date de commande</th>
+                <th>Statut de la commande</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for commande in commandes %}
+            <tr>
+                <td>{{ commande.id }}</td>
+                <td>{{ commande.user }}</td>
+                <td>{{ commande.date|date('d/m/Y H:i') }}</td>
+                <td>{{ commande.status.status }}</td>
+            </tr>
+        {% else %}
+            <p>Aucun produit trouvé.</p>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

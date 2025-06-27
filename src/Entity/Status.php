@@ -42,12 +42,12 @@ class Status
 
     public function getStatus(): ?string
     {
-        return $this->Status;
+        return $this->status;
     }
 
     public function setStatus(string $status): static
     {
-        $this->Status = $status;
+        $this->status = $status;
 
         return $this;
     }
